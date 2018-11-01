@@ -23,7 +23,7 @@ display.setDefault("background", 1, 1, 1)
 math.randomseed(os.time())
 
 -- Defino uma tabela de cores para usar em toda a aplicação
-color =
+cores =
 {
 	amarelo   =   { r = 235/255, g = 189/255, b = 18/255 },
 	verde     =   { r = 145/255, g = 163/255, b = 41/255 },
