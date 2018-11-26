@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Fontes"
+    "\\Fontes",
+    "\\Fontes\\cenas"
   ],
-  "SelectedNode": "\\Fontes\\imagens",
+  "SelectedNode": "\\Fontes\\cenas\\game.lua",
   "PreviewInSolutionExplorer": false
 }
