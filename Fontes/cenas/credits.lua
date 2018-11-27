@@ -51,27 +51,27 @@ local function createBackground(sceneGroup)
   local logo = display.newText(sceneGroup, "Créditos", display.contentCenterX, 130, "./font/edo.ttf", 130)
   logo.anchorX = 0.5
   logo.anchorY = 0.5
-  logo:setFillColor(color.branco.r, color.branco.g, color.branco.b)
+  logo:setFillColor(cores.branco.r, cores.branco.g, cores.branco.b)
 
   local jeidsan = display.newText(sceneGroup, "Jeidsan A. da C. Pereira", display.contentCenterX, 130, "./font/Sniglet-Regular.otf", 60)
   jeidsan.x = display.contentCenterX
   jeidsan.y = display.contentCenterY - 40
-  jeidsan:setFillColor(color.branco.r, color.branco.g, color.branco.b)
+  jeidsan:setFillColor(cores.branco.r, cores.branco.g, cores.branco.b)
 
   local jeidsanEmail = display.newText(sceneGroup, "(jeidsan.pereira@gmail.com)", display.contentCenterX, 130, "./font/Sniglet-Regular.otf", 60)
   jeidsanEmail.x = display.contentCenterX
   jeidsanEmail.y = display.contentCenterY + 20
-  jeidsanEmail:setFillColor(color.branco.r, color.branco.g, color.branco.b)
+  jeidsanEmail:setFillColor(cores.branco.r, cores.branco.g, cores.branco.b)
 
   local rafaela = display.newText(sceneGroup, "Rafaela Ruchinski", display.contentCenterX, 130, "./font/Sniglet-Regular.otf", 60)
   rafaela.x = display.contentCenterX
   rafaela.y = display.contentCenterY + 150
-  rafaela:setFillColor(color.branco.r, color.branco.g, color.branco.b)
+  rafaela:setFillColor(cores.branco.r, cores.branco.g, cores.branco.b)
 
   local rafaelaEmail = display.newText(sceneGroup, "(rafaelaruchi@gmail.com)", display.contentCenterX, 130, "./font/Sniglet-Regular.otf", 60)
   rafaelaEmail.x = display.contentCenterX
   rafaelaEmail.y = display.contentCenterY + 210
-  rafaelaEmail:setFillColor(color.branco.r, color.branco.g, color.branco.b)
+  rafaelaEmail:setFillColor(cores.branco.r, cores.branco.g, cores.branco.b)
 
 end
 

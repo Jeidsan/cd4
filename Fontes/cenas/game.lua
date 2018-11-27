@@ -79,7 +79,6 @@ local bonusDefesa = 10 --composer.getVariable("bonusDefesa")
 local bonusAtaque = 25 --composer.getVariable("bonusAtaque")
 local quantidadeInimigos = 15 --composer.getVariable("quantidadeInimigos")
 
--- Carrego os demais par�metros do jogo
 composer.setVariable("vidas", 5)
 local vidas = composer.getVariable("vidas")
 
@@ -96,22 +95,17 @@ composer.setVariable("defesa", 10)
 local defesa = composer.getVariable("defesa")
 
 -- -----------------------------------------------------------------------------
--- M�todos e escopo principal da cena
+-- Métodos e escopo principal da cena
 -- -----------------------------------------------------------------------------
 
--- Seto ps parâmetros iniciais
-composer.setVariable("score", 0)
-composer.setVariable("energy", 5)
-
--- Cria o plano de fundo da cena e adiciona uma movimenta��o
 local function criarBackground(group)
 	-- Crio o background para o jogo e posiciono-o
 	background = display.newImageRect(group, "./imagens/game/background1.png", 2955, 768)
 	background.x = display.contentCenterY
 	background.y = display.contentCenterY
+	background.alpha = 0.6
 end
 
--- Controla o efeito do personagem correndo
 local function loopJogador()
 	--[[if nrGamer == 1 then
 		gamer1.isVisible = true
@@ -131,17 +125,12 @@ local function loopJogador()
 	end]]
 end
 
--- Cria o jogador e trata a sua movimenta��o
 local function criarJogador(group)
-	-- Crio o grupo para o jogador
 	imgJogador = display.newImageRect(group, "./imagens/samurai.png", 220, 220)
 	imgJogador.x = 150
-	imgJogador.y = display.contentHeight - 250
-
-	-- Informo que o gamer � do tipo gamer
+	imgJogador.y = display.contentHeight - 250	
 	imgJogador.type = "jogador"
 
-	-- Adiciono-o ao motor de f�sica
 	physics.addBody(imgJogador, "static")
 end
 
@@ -149,25 +138,12 @@ end
 local function subir()
 	imgJogador.x = 150
 	imgJogador.y = 250
-	--imgJogador:applyLinearImpulse(0, -7, imgJogador.x, imgJogador.y)
 end
 
 -- Faz o jogador pular
 local function descer()
 	imgJogador.x = 150
 	imgJogador.y = display.contentHeight - 250
-	--imgJogador:applyLinearImpulse(0, -7, imgJogador.x, imgJogador.y)
-end
-
--- Faz o jogador atirar
-local function atirar()
-	local bala = display.newImageRect(, objectSheet, 5, 14, 40 )
-    physics.addBody( newLaser, "dynamic", { isSensor=true } )
-    newLaser.isBullet = true
-    newLaser.myName = "laser"
- 
-    newLaser.x = ship.x
-    newLaser.y = ship.y
 end
 
 local function ajustarTexto(text)
@@ -180,20 +156,21 @@ local function ajustarTexto(text)
 end
 
 local function loadQuestionTable()
-  -- Carrego a biblioteca JSON para decodificao os dados
-  local json = require("json")
+	-- Carrego a biblioteca JSON para decodificao os dados
+	local json = require("json")
 
-  -- Defino o caminho do arquivo de dados
-  local dataPath = system.pathForFile("data/data.json", system.ResourceDirectory)
+	-- Defino o caminho do arquivo de dados
+	local dataPath = system.pathForFile("data/data.json", system.ResourceDirectory)
 
-  -- Carrego o arquivo de dados na variável file (errorString irá indicar se houve erro)
-  local file, errorString = io.open(dataPath, "r")
+	-- Carrego o arquivo de dados na variável file (errorString irá indicar se houve erro)
+	local file, errorString = io.open(dataPath, "r")
 
-  -- Carrego os dados na tabela
-  if not file then
-    -- TODO: Jeidsan: Tratar o caso de erro ao carregar arquivo
-  else
-    -- Carrego os dados do arquivo
+	-- Carrego os dados na tabela
+	if not file then
+		-- TODO: Jeidsan: Tratar o caso de erro ao carregar arquivo
+	else
+    
+	-- Carrego os dados do arquivo
     local contents = file:read("*a")
     io.close(file)
 
@@ -204,7 +181,6 @@ local function loadQuestionTable()
   end
 end
 
--- Atualiza os textos de pontua��o, muni��o e vidas
 local function atualizarInformacoes()
 	txtVidas.text = ajustarTexto(vidas)
 	txtPerguntas.text = ajustarTexto(perguntas)
@@ -216,12 +192,11 @@ end
 -- Faz o jogador atirar
 local function atirar()
 	if (ataque > 0) then
-		local bala = display.newImageRect("./imagens/bala.png", 30, 30)
+		local bala = display.newImageRect("./imagens/bala.png", 50, 50)
 		physics.addBody(bala, "static", { isSensor = true } )    
 		bala.type = "bala"
 		bala.x = imgJogador.x
-		bala.y = imgJogador.y
-		bala:toBack()
+		bala.y = imgJogador.y	
 
 		transition.to(bala, { x = display.contentWidth + 50, time = 500, onComplete = function() display.remove(bala) end })
 		ataque = ataque - 1
@@ -231,7 +206,7 @@ end
 
 -- Cria o painel de informações do jogo
 local function criarGrupoInformacoes(infoGroup)
-	-- Cria o �cone das vidas
+	-- Cria o ícone das vidas
 	imgVidas = display.newImageRect(infoGroup, "./imagens/vidas.png", tamanhoIcone, tamanhoIcone)
 	imgVidas.x = tamanhoMargem
 	imgVidas.y = tamanhoMargem
@@ -246,7 +221,7 @@ local function criarGrupoInformacoes(infoGroup)
 		fontSize = tamanhoIcone
 	}
 	txtVidas = display.newText(options)
-	txtVidas:setFillColor(color.vermelho.r, color.vermelho.g, color.vermelho.b)
+	txtVidas:setFillColor(cores.vermelho.r, cores.vermelho.g, cores.vermelho.b)
 	txtVidas.anchorX = 0
 
 	-- Cria o �cone das perguntas
@@ -264,7 +239,7 @@ local function criarGrupoInformacoes(infoGroup)
 		fontSize = tamanhoIcone
 	}
 	txtPerguntas = display.newText(options)
-	txtPerguntas:setFillColor(color.vermelho.r, color.vermelho.g, color.vermelho.b)
+	txtPerguntas:setFillColor(cores.vermelho.r, cores.vermelho.g, cores.vermelho.b)
 	txtPerguntas.anchorX = 0
 
 	-- Cria o �cone da pontua��o
@@ -282,7 +257,7 @@ local function criarGrupoInformacoes(infoGroup)
 		fontSize = 2 * tamanhoIcone
 	}
 	txtPontos = display.newText(options)
-	txtPontos:setFillColor(color.vermelho.r, color.vermelho.g, color.vermelho.b)
+	txtPontos:setFillColor(cores.vermelho.r, cores.vermelho.g, cores.vermelho.b)
 	txtPontos.anchorX = 0
 
 	-- Cria o �cone do poder de ataque
@@ -300,7 +275,7 @@ local function criarGrupoInformacoes(infoGroup)
 		fontSize = tamanhoIcone
 	}
 	txtAtaque = display.newText(options)
-	txtAtaque:setFillColor(color.vermelho.r, color.vermelho.g, color.vermelho.b)
+	txtAtaque:setFillColor(cores.vermelho.r, cores.vermelho.g, cores.vermelho.b)
 	txtAtaque.anchorX = 0
 
 	-- Cria o �cone do poder de defesa
@@ -318,18 +293,11 @@ local function criarGrupoInformacoes(infoGroup)
 		fontSize = tamanhoIcone
 	}
 	txtDefesa = display.newText(options)
-	txtDefesa:setFillColor(color.vermelho.r, color.vermelho.g, color.vermelho.b)
+	txtDefesa:setFillColor(cores.vermelho.r, cores.vermelho.g, cores.vermelho.b)
 	txtDefesa.anchorX = 0
 end
 
--- Cria o cen�rio
 local function criarGrupoCenario(group)
-	-- Crio a plataforma
-	--plataforma = display.newLine(group, 0, display.contentHeight - 155, display.contentWidth, display.contentHeight - 155)
-	--plataforma.anchorY = 0
-	--plataforma:setStrokeColor(0,0,0, 1)
-	--plataforma.strokeWidth = 2
-	--physics.addBody(plataforma, "static")
 end
 
 local function gotoMenu()
@@ -409,14 +377,10 @@ local function gameLoop()
 end
 
 local function gameOver()
-	-- Manda para a proxima cena a pontua�ao total
-	composer.setVariable("score", txtScore.text)
-
-	--Muda de cena - Fim de Jogo
+	composer.setVariable("pontos", pontos)
 	composer.gotoScene("cenas.gameover")
 end
 
--- Trata das colis�es com os inimigos
 local function penalizarJogador()
 	defesa = defesa - danoJogador
 	if defesa == 0 then
@@ -428,7 +392,6 @@ local function penalizarJogador()
 	end
 end
 
--- Trata das colis�es com os bonus de defesa
 local function incrementaDefesa()
 	defesa = defesa + bonusDefesa
 end
@@ -438,7 +401,7 @@ local function incrementaAtaque()
 end
 
 local function irParaChefao()
-	composer.setVariable("score", txtScore.text)
+	composer.setVariable("pontos", pontos)
 	composer.gotoScene("cenas.chefao")
 end
 
@@ -449,55 +412,46 @@ local function penalizarInimigo(inimigo)
 		display.remove(inimigo)
 
 		quantidadeInimigos = quantidadeInimigos - 1
-		if (quantidadeInimigos == 0)
+		if (quantidadeInimigos == 0) then
 			irParaChefao()
 		end
 	end
 end
 
 local function irParaPergunta()
-	-- Pauso o jogo
-  gamePaused = true;
+	gamePaused = true;
 
 	local inicio = 0
-  local fim = 18
+	local fim = 18
 	-- Sorteio uma das questões e asalternativas
-  local nrQuestion
-  nrQuestion = math.random(inicio, fim)
+	local nrQuestion
+	nrQuestion = math.random(inicio, fim)
 
 	local alts = {
-    {
-      ds_alter = questionTable[nrQuestion].ds_alter1
-    },
-    {
-      ds_alter = questionTable[nrQuestion].ds_alter2
-    },
-  }
+		{ ds_alter = questionTable[nrQuestion].ds_alter1 },
+		{ ds_alter = questionTable[nrQuestion].ds_alter2 },
+	}
 
 	local quiz = questionTable[nrQuestion]
 
-	-- Carrego a questão na variável com composer
 	composer.setVariable("quiz", quiz)
 	composer.setVariable("alternativas", alts)
 
 	composer.removeScene("cenas.quiz")
-  composer.gotoScene("cenas.quiz", { time=1000, effect="crossFade" })
+	composer.gotoScene("cenas.quiz", { time=1000, effect="crossFade" })
 
 	perguntas = perguntas + 1
 
 	-- SE ACERTAR, INCREMENTAR A VARI�VEL pontos
 end
 
--- Trata a colis�o entre objetos
 local function onCollision(event)
 	if (not gamePaused) then
 		-- Capturo os objetos que colidiram
 		local obj1 = event.object1
 		local obj2 = event.object2
 
-		-- Verifico se � o in�cio da colis�o com a phase "began"
 		if ( event.phase == "began" ) then
-			-- Testo as colis�es que preciso tratar
 			if (obj1.type == "jogador" and obj2.type == "inimigo")  then
 				penalizarJogador()
 				display.remove(obj2)
@@ -517,10 +471,10 @@ local function onCollision(event)
 				incrementaAtaque()
 				display.remove(obj1)
 			elseif (obj1.type == "jogador" and obj2.type == "pergunta") then
-				irParaPergunta()
+				--irParaPergunta()
 				display.remove(obj2)
 			elseif (obj1.type == "pergunta" and obj2.type == "jogador") then
-				irParaPergunta()
+				--irParaPergunta()
 				display.remove(obj1)
 			elseif (obj1.type == "bala" and obj2.type == "inimigo") then
 				penalizarInimigo(obj2)
@@ -541,25 +495,18 @@ Runtime:addEventListener("collision", onCollision)
 -- Eventos da cena
 -- -----------------------------------------------------------------------------
 
--- Quando a cena � criada.
 function scene:create(event)
-	-- Busco o grupo principal para a cena
 	local sceneGroup = self.view
-
-	-- Pauso a f�sica temporareamente
 	physics.pause()
 
-	-- Crio o grupo de background e adiciono ao grupo da cena
 	groupBackground = display.newGroup()
 	sceneGroup:insert(groupBackground)
 	criarBackground(groupBackground)
 
-	-- Crio o grupo do cen�rio e adiciono ao grupo da cena
 	groupCenario = display.newGroup()
 	sceneGroup:insert(groupCenario)
 	criarGrupoCenario(groupCenario)
 
-	-- Crio o grupo de informa��es e adiciono ao grupo da cena
 	groupInformacoes = display.newGroup()
 	sceneGroup:insert(groupInformacoes)
 	criarGrupoInformacoes(groupInformacoes)

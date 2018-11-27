@@ -81,7 +81,7 @@ local function createBackground(sceneGroup)
   local logo = display.newText(sceneGroup, "Recordes", display.contentCenterX, 130, "./font/edo.ttf", 130)
   logo.anchorX = 0.5
   logo.anchorY = 0.5
-  logo:setFillColor(color.branco.r, color.branco.g, color.branco.b)
+  logo:setFillColor(cores.branco.r, cores.branco.g, cores.branco.b)
 
   local textHeight = 260;
 
@@ -91,7 +91,7 @@ local function createBackground(sceneGroup)
     if (scoresTable[i]) then
       -- crio um novo texto para inserir
       local center = display.newText(sceneGroup, scoresTable[i], display.contentCenterX, textHeight, "./font/Sniglet-Regular.otf", 70)
-      center:setFillColor(color.branco.r, color.branco.g, color.branco.b)
+      center:setFillColor(cores.branco.r, cores.branco.g, cores.branco.b)
       center.anchorX = 0.5
 
       --Incremnento a posição do texto

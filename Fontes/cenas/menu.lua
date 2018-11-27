@@ -63,20 +63,20 @@ function scene:create(event)
 	-- Crio a logo go jogo
 	local title1 = display.newText(sceneGroup, "CD4", (display.contentWidth / 10) * 3, 90, "./font/edo.ttf", 130 )
 	local title2 = display.newText(sceneGroup, "The Agent", (display.contentWidth / 10) * 3, 220, "./font/edo.ttf", 90 )
-  --title1:setFillColor(color.branco.r, color.branco.g, color.branco.b, 0.85)
+  --title1:setFillColor(cores.branco.r, cores.branco.g, cores.branco.b, 0.85)
 
 	-- Crio as op��es do menu
 	local btnPlay = display.newText(sceneGroup, "Novo Jogo", (display.contentWidth / 9) * 7, 220, "./font/Sniglet-Regular.otf", 90)
-	btnPlay:setFillColor(color.branco.r, color.branco.g, color.branco.b, 0.85)
+	btnPlay:setFillColor(cores.branco.r, cores.branco.g, cores.branco.b, 0.85)
 	btnPlay:addEventListener("tap", gotoGame)
 
 
 	local btnHighScores = display.newText(sceneGroup, "Pontuação", (display.contentWidth / 9) * 7, 350, "./font/Sniglet-Regular.otf", 90)
-	btnHighScores:setFillColor(color.branco.r, color.branco.g, color.branco.b, 0.85)
+	btnHighScores:setFillColor(cores.branco.r, cores.branco.g, cores.branco.b, 0.85)
 	btnHighScores:addEventListener("tap", gotoHighScores)
 
 	local btnCredits = display.newText(sceneGroup, "Info", (display.contentWidth / 9) * 7, 480, "./font/Sniglet-Regular.otf", 90)
-	btnCredits:setFillColor(color.branco.r, color.branco.g, color.branco.b, 0.85)
+	btnCredits:setFillColor(cores.branco.r, cores.branco.g, cores.branco.b, 0.85)
 	btnCredits:addEventListener("tap", gotoCredits)
 
 end

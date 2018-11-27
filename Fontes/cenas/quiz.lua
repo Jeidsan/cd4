@@ -84,7 +84,7 @@ local function loadQuestion(backGroup)
 	local questao = display.newText(questionGroup, quiz.ds_pergunta, display.contentCenterX, 100, "./font/Sniglet-Regular.otf", 42)
   questao.anchorX = 0.5
   questao.anchorY = 0.5
-	questao:setFillColor(color.preto.r, color.preto.g, color.preto.b)
+	questao:setFillColor(cores.preto.r, cores.preto.g, cores.preto.b)
 
 	-- Crio quadros para servir de fundo as imagens
 	local alternativeQuestionBackground1 = display.newRect(questionGroup, display.contentCenterX, display.contentCenterY - 50, _WIDTH + 70, _HEIGHT)
@@ -126,9 +126,9 @@ local function loadQuestion(backGroup)
     alternative3:addEventListener("tap", quizGoodAlternative)
 end
 
-  alternative1:setFillColor(color.preto.r, color.preto.g, color.preto.b)
-	alternative2:setFillColor(color.preto.r, color.preto.g, color.preto.b)
-	alternative3:setFillColor(color.preto.r, color.preto.g, color.preto.b)
+  alternative1:setFillColor(cores.preto.r, cores.preto.g, cores.preto.b)
+	alternative2:setFillColor(cores.preto.r, cores.preto.g, cores.preto.b)
+	alternative3:setFillColor(cores.preto.r, cores.preto.g, cores.preto.b)
 end
 -- -----------------------------------------------------------------------------
 -- Eventos da cena

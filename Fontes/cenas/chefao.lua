@@ -99,12 +99,12 @@ local direcaoChefao = 1
 -- Métodos e escopo principal da cena
 -- -----------------------------------------------------------------------------
 
--- Cria o plano de fundo da cena e adiciona uma movimentação
 local function criarBackground(group)
 	-- Crio o background para o jogo e posiciono-o
-	--background = display.newImageRect(group, "images/backgroundGame.jpg", 2955, 768)
-	--background.x = display.contentCenterY
-	--background.y = display.contentCenterY
+	background = display.newImageRect(group, "./imagens/game/background1.png", 2955, 768)
+	background.x = display.contentCenterY
+	background.y = display.contentCenterY
+	background.alpha = 0.6
 end
 
 local function criarJogador(group)
