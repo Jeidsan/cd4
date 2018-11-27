@@ -11,24 +11,24 @@
 --  ----------------------------------------------------------------------------------------------
 
 --  ----------------------------------------------------------------------------------------------
--- Configuração inicial para a cena
+-- Configuraï¿½ï¿½o inicial para a cena
 --  ----------------------------------------------------------------------------------------------
 
--- Carrego o Composer para tratar as cenas da aplicação
+-- Carrego o Composer para tratar as cenas da aplicaï¿½ï¿½o
 local composer = require("composer")
 
 -- Crio uma nova cena
 local scene = composer.newScene()
 
--- Carrego o motor de física
+-- Carrego o motor de fï¿½sica
 local physics = require("physics")
 
--- Seto a gravidade como zero para que os objetos não caiam
+-- Seto a gravidade como zero para que os objetos nï¿½o caiam
 physics.start()
 physics.setGravity(0, 20)
 
 --  ----------------------------------------------------------------------------------------------
--- Variáveis da cena
+-- Variï¿½veis da cena
 --  ----------------------------------------------------------------------------------------------
 
 -- Imagens
@@ -60,26 +60,26 @@ local timerJogador
 local timerCenario
 
 -- Tabela para carregar as perguntas
-local tablePerguntas = {}
+local questionTable = {}
 
--- Variável para informar se o jogo está pausado.
+-- Variï¿½vel para informar se o jogo estï¿½ pausado.
 local flagPausado = true
 
 -- Musica
 
--- Unidades de referência para os elementos gráficos
+-- Unidades de referï¿½ncia para os elementos grï¿½ficos
 local tamanhoIcone = 40
 local tamanhoMargem = 40
 local tamanhoUnidade = (display.contentWidth / 5) - tamanhoMargem
 
--- Parâmetros para definir a dificuldade do jogo
+-- Parï¿½metros para definir a dificuldade do jogo
 local danoJogador = 1 --composer.getVariable("danoJogador")
 local danoInimigo = 2 --composer.getVariable("danoInimigo")
 local bonusDefesa = 10 --composer.getVariable("bonusDefesa")
 local bonusAtaque = 25 --composer.getVariable("bonusAtaque")
 local quantidadeInimigos = 15 --composer.getVariable("quantidadeInimigos")
 
--- Carrego os demais parâmetros do jogo
+-- Carrego os demais parï¿½metros do jogo
 composer.setVariable("vidas", 5)
 local vidas = composer.getVariable("vidas")
 
@@ -96,15 +96,19 @@ composer.setVariable("defesa", 10)
 local defesa = composer.getVariable("defesa")
 
 -- -----------------------------------------------------------------------------
--- Métodos e escopo principal da cena
+-- Mï¿½todos e escopo principal da cena
 -- -----------------------------------------------------------------------------
 
--- Cria o plano de fundo da cena e adiciona uma movimentação
+-- Seto ps parÃ¢metros iniciais
+composer.setVariable("score", 0)
+composer.setVariable("energy", 5)
+
+-- Cria o plano de fundo da cena e adiciona uma movimentaï¿½ï¿½o
 local function criarBackground(group)
 	-- Crio o background para o jogo e posiciono-o
-	--background = display.newImageRect(group, "images/backgroundGame.jpg", 2955, 768)
-	--background.x = display.contentCenterY
-	--background.y = display.contentCenterY
+	background = display.newImageRect(group, "./imagens/game/background1.png", 2955, 768)
+	background.x = display.contentCenterY
+	background.y = display.contentCenterY
 end
 
 -- Controla o efeito do personagem correndo
@@ -127,17 +131,17 @@ local function loopJogador()
 	end]]
 end
 
--- Cria o jogador e trata a sua movimentação
+-- Cria o jogador e trata a sua movimentaï¿½ï¿½o
 local function criarJogador(group)
 	-- Crio o grupo para o jogador
 	imgJogador = display.newImageRect(group, "./imagens/samurai.png", 220, 220)
 	imgJogador.x = 150
-	imgJogador.y = display.contentHeight - 250	
+	imgJogador.y = display.contentHeight - 250
 
-	-- Informo que o gamer é do tipo gamer
+	-- Informo que o gamer ï¿½ do tipo gamer
 	imgJogador.type = "jogador"
 
-	-- Adiciono-o ao motor de física
+	-- Adiciono-o ao motor de fï¿½sica
 	physics.addBody(imgJogador, "static")
 end
 
@@ -155,16 +159,52 @@ local function descer()
 	--imgJogador:applyLinearImpulse(0, -7, imgJogador.x, imgJogador.y)
 end
 
+-- Faz o jogador atirar
+local function atirar()
+	local bala = display.newImageRect(, objectSheet, 5, 14, 40 )
+    physics.addBody( newLaser, "dynamic", { isSensor=true } )
+    newLaser.isBullet = true
+    newLaser.myName = "laser"
+ 
+    newLaser.x = ship.x
+    newLaser.y = ship.y
+end
+
 local function ajustarTexto(text)
-	text = tostring(text)	
+	text = tostring(text)
 	local qtyZeros = 8 - #text
 	for i = 1, qtyZeros do
 		text = "0" .. text
-	end	
+	end
 	return text
 end
 
--- Atualiza os textos de pontuação, munição e vidas
+local function loadQuestionTable()
+  -- Carrego a biblioteca JSON para decodificao os dados
+  local json = require("json")
+
+  -- Defino o caminho do arquivo de dados
+  local dataPath = system.pathForFile("data/data.json", system.ResourceDirectory)
+
+  -- Carrego o arquivo de dados na variÃ¡vel file (errorString irÃ¡ indicar se houve erro)
+  local file, errorString = io.open(dataPath, "r")
+
+  -- Carrego os dados na tabela
+  if not file then
+    -- TODO: Jeidsan: Tratar o caso de erro ao carregar arquivo
+  else
+    -- Carrego os dados do arquivo
+    local contents = file:read("*a")
+    io.close(file)
+
+    -- Converto os dados de JSON para o formato de tabela de Lua
+    questionTable = json.decode(contents)
+
+    -- TODO: Jeidsan: Tratar caso em que a tabela nÃ£o contenha dados
+  end
+end
+
+-- Atualiza os textos de pontuaï¿½ï¿½o, muniï¿½ï¿½o e vidas
 local function atualizarInformacoes()
 	txtVidas.text = ajustarTexto(vidas)
 	txtPerguntas.text = ajustarTexto(perguntas)
@@ -189,100 +229,100 @@ local function atirar()
 	end
 end
 
--- Cria o painel de informações do jogo
+-- Cria o painel de informaÃ§Ãµes do jogo
 local function criarGrupoInformacoes(infoGroup)
-	-- Cria o ícone das vidas
+	-- Cria o ï¿½cone das vidas
 	imgVidas = display.newImageRect(infoGroup, "./imagens/vidas.png", tamanhoIcone, tamanhoIcone)
 	imgVidas.x = tamanhoMargem
 	imgVidas.y = tamanhoMargem
 
-	-- Crio o texto para informações sobre a vidas
-	local options = { 
-		parent = infoGroup, 
-		text = ajustarTexto(vidas), 
-		x = tamanhoMargem + tamanhoIcone, 
+	-- Crio o texto para informaï¿½ï¿½es sobre a vidas
+	local options = {
+		parent = infoGroup,
+		text = ajustarTexto(vidas),
+		x = tamanhoMargem + tamanhoIcone,
 		y = tamanhoMargem,
-		font = native.systemFont, 
+		font = native.systemFont,
 		fontSize = tamanhoIcone
 	}
-	txtVidas = display.newText(options)	
-	txtVidas:setFillColor(cores.vermelho.r, cores.vermelho.g, cores.vermelho.b)
+	txtVidas = display.newText(options)
+	txtVidas:setFillColor(color.vermelho.r, color.vermelho.g, color.vermelho.b)
 	txtVidas.anchorX = 0
 
-	-- Cria o ícone das perguntas
+	-- Cria o ï¿½cone das perguntas
 	imgPerguntas = display.newImageRect(infoGroup, "./imagens/pergunta.png", tamanhoIcone, tamanhoIcone)
 	imgPerguntas.x = tamanhoMargem
 	imgPerguntas.y = 10 + tamanhoMargem + tamanhoIcone
 
-	-- Crio o texto para informações sobre a perguntas
-	options = { 
-		parent = infoGroup, 
-		text = ajustarTexto(perguntas), 
-		x = tamanhoMargem + tamanhoIcone, 
-		y = 10 + tamanhoMargem + tamanhoIcone, 
-		font = native.systemFont, 
+	-- Crio o texto para informaï¿½ï¿½es sobre a perguntas
+	options = {
+		parent = infoGroup,
+		text = ajustarTexto(perguntas),
+		x = tamanhoMargem + tamanhoIcone,
+		y = 10 + tamanhoMargem + tamanhoIcone,
+		font = native.systemFont,
 		fontSize = tamanhoIcone
 	}
-	txtPerguntas = display.newText(options)	
-	txtPerguntas:setFillColor(cores.vermelho.r, cores.vermelho.g, cores.vermelho.b)
+	txtPerguntas = display.newText(options)
+	txtPerguntas:setFillColor(color.vermelho.r, color.vermelho.g, color.vermelho.b)
 	txtPerguntas.anchorX = 0
-	
-	-- Cria o ícone da pontuação
+
+	-- Cria o ï¿½cone da pontuaï¿½ï¿½o
 	imgPontos = display.newImageRect(infoGroup, "./imagens/pontos.png", 2 * tamanhoIcone, 2 * tamanhoIcone)
 	imgPontos.x = display.contentCenterX - 5.5 * tamanhoIcone --2 * tamanhoMargem + tamanhoIcone + tamanhoUnidade
 	imgPontos.y = 60
 
-	-- Crio o texto para informações sobre pontos
-	options = { 
-		parent = infoGroup, 
-		text = ajustarTexto(composer.getVariable("pontos")), 
-		x = display.contentCenterX - 3.5 * tamanhoIcone, --3 * tamanhoMargem + 2 * tamanhoIcone + tamanhoUnidade, 
-		y = 65, 
-		font = native.systemFont, 
+	-- Crio o texto para informaï¿½ï¿½es sobre pontos
+	options = {
+		parent = infoGroup,
+		text = ajustarTexto(composer.getVariable("pontos")),
+		x = display.contentCenterX - 3.5 * tamanhoIcone, --3 * tamanhoMargem + 2 * tamanhoIcone + tamanhoUnidade,
+		y = 65,
+		font = native.systemFont,
 		fontSize = 2 * tamanhoIcone
 	}
-	txtPontos = display.newText(options)	
-	txtPontos:setFillColor(cores.vermelho.r, cores.vermelho.g, cores.vermelho.b)
+	txtPontos = display.newText(options)
+	txtPontos:setFillColor(color.vermelho.r, color.vermelho.g, color.vermelho.b)
 	txtPontos.anchorX = 0
-	
-	-- Cria o ícone do poder de ataque
+
+	-- Cria o ï¿½cone do poder de ataque
 	imgAtaque = display.newImageRect(infoGroup, "./imagens/ataque.png", tamanhoIcone, tamanhoIcone)
 	imgAtaque.x = display.contentWidth - tamanhoUnidade - tamanhoIcone
 	imgAtaque.y = tamanhoMargem
 
-	-- Crio o texto para informações sobre o ataque
-	options = { 
-		parent = infoGroup, 
-		text = ajustarTexto(ataque), 
-		x = display.contentWidth - tamanhoUnidade, 
-		y = tamanhoMargem, 
-		font = native.systemFont, 
+	-- Crio o texto para informaï¿½ï¿½es sobre o ataque
+	options = {
+		parent = infoGroup,
+		text = ajustarTexto(ataque),
+		x = display.contentWidth - tamanhoUnidade,
+		y = tamanhoMargem,
+		font = native.systemFont,
 		fontSize = tamanhoIcone
 	}
-	txtAtaque = display.newText(options)	
-	txtAtaque:setFillColor(cores.vermelho.r, cores.vermelho.g, cores.vermelho.b)
+	txtAtaque = display.newText(options)
+	txtAtaque:setFillColor(color.vermelho.r, color.vermelho.g, color.vermelho.b)
 	txtAtaque.anchorX = 0
 
-	-- Cria o ícone do poder de defesa
+	-- Cria o ï¿½cone do poder de defesa
 	imgDefesa = display.newImageRect(infoGroup, "./imagens/defesa.png", tamanhoIcone, tamanhoIcone)
 	imgDefesa.x = display.contentWidth - tamanhoUnidade - tamanhoIcone
-	imgDefesa.y = 10 + tamanhoMargem + tamanhoIcone	
+	imgDefesa.y = 10 + tamanhoMargem + tamanhoIcone
 
-	-- Crio o texto para informações sobre a defesa
-	options = { 
-		parent = infoGroup, 
-		text = ajustarTexto(defesa), 
-		x = display.contentWidth - tamanhoUnidade, 
-		y = 10 + tamanhoMargem + tamanhoIcone, 
-		font = native.systemFont, 
+	-- Crio o texto para informaï¿½ï¿½es sobre a defesa
+	options = {
+		parent = infoGroup,
+		text = ajustarTexto(defesa),
+		x = display.contentWidth - tamanhoUnidade,
+		y = 10 + tamanhoMargem + tamanhoIcone,
+		font = native.systemFont,
 		fontSize = tamanhoIcone
 	}
-	txtDefesa = display.newText(options)	
-	txtDefesa:setFillColor(cores.vermelho.r, cores.vermelho.g, cores.vermelho.b)
-	txtDefesa.anchorX = 0	
+	txtDefesa = display.newText(options)
+	txtDefesa:setFillColor(color.vermelho.r, color.vermelho.g, color.vermelho.b)
+	txtDefesa.anchorX = 0
 end
 
--- Cria o cenário
+-- Cria o cenï¿½rio
 local function criarGrupoCenario(group)
 	-- Crio a plataforma
 	--plataforma = display.newLine(group, 0, display.contentHeight - 155, display.contentWidth, display.contentHeight - 155)
@@ -295,28 +335,28 @@ end
 local function gotoMenu()
   composer.gotoScene("cenas.menu")
 end
-	
+
 -- Cria o grupo de controles
 local function criarGrupoControle(group)
-  -- Cria o botão para subir
+  -- Cria o botï¿½o para subir
   local btnSubir = display.newImageRect(group, "./imagens/pular.png", 2 * tamanhoIcone, 2 * tamanhoIcone)
   btnSubir.x = 2 * tamanhoMargem
   btnSubir.y = display.contentHeight - 2 * tamanhoMargem
   btnSubir:addEventListener("tap", subir)
 
-  -- Cria o botão para descer
+  -- Cria o botï¿½o para descer
   local btnDescer = display.newImageRect(group, "./imagens/abaixar.png", 2 * tamanhoIcone, 2 * tamanhoIcone)
   btnDescer.x = 4.5 * tamanhoMargem
   btnDescer.y = display.contentHeight - 2 * tamanhoMargem
   btnDescer:addEventListener("tap", descer)
-  
-  -- Cria o botão de atirar 
+
+  -- Cria o botï¿½o de atirar
   local btnAtirar = display.newImageRect(group, "./imagens/ataque.png", 2 * tamanhoIcone, 2 * tamanhoIcone)
   btnAtirar.x = display.contentWidth - 3 * tamanhoMargem
   btnAtirar.y = display.contentHeight - 2 * tamanhoMargem
   btnAtirar:addEventListener("tap", atirar)
 
-  -- Cria o botão fechar 
+  -- Cria o botï¿½o fechar
   local btnFechar = display.newImageRect(group, "./imagens/fechar.png", 2 * tamanhoIcone, 2 * tamanhoIcone)
   btnFechar.x = display.contentCenterX
   btnFechar.y = display.contentHeight - 2 * tamanhoMargem
@@ -328,9 +368,9 @@ local function criarObjeto(tipoObjeto)
 	-- Crio o inimigo
 	local objeto = display.newImageRect(groupCenario, "./imagens/" .. tipoObjeto .. ".png", 100, 100)
 
-	-- Posiciona o objeto	
-	objeto.x = display.contentWidth + 100 
-	
+	-- Posiciona o objeto
+	objeto.x = display.contentWidth + 100
+
 	if (math.random(3) == 1) then
 		objeto.y = 250
 	else
@@ -344,16 +384,16 @@ local function criarObjeto(tipoObjeto)
 	-- Defino o tipo do objeto
 	objeto.type = tipoObjeto
 
-	-- Submeto o objeto à ação da física
+	-- Submeto o objeto ï¿½ aï¿½ï¿½o da fï¿½sica
 	physics.addBody(objeto, "dynamic")
 
-	-- Impulsiono o obstáculo em direção ao jogador
+	-- Impulsiono o obstï¿½culo em direï¿½ï¿½o ao jogador
 	transition.to(objeto, { x = -100, y = objeto.y, time = 4000, onComplete = function() display.remove(objeto) end})
 end
 
 -- Implementa o loop do jogo
 local function gameLoop()
-	-- Sorteio o objeto que será criado
+	-- Sorteio o objeto que serÃ¡ criado
 	local objectType = math.random(8)
 
 	-- Crio o objeto conforme sorteio
@@ -369,14 +409,14 @@ local function gameLoop()
 end
 
 local function gameOver()
-	-- Manda para a proxima cena a pontuaçao total
+	-- Manda para a proxima cena a pontuaï¿½ao total
 	composer.setVariable("score", txtScore.text)
 
 	--Muda de cena - Fim de Jogo
 	composer.gotoScene("cenas.gameover")
 end
 
--- Trata das colisões com os inimigos
+-- Trata das colisï¿½es com os inimigos
 local function penalizarJogador()
 	defesa = defesa - danoJogador
 	if defesa == 0 then
@@ -388,10 +428,10 @@ local function penalizarJogador()
 	end
 end
 
--- Trata das colisões com os bonus de defesa
+-- Trata das colisï¿½es com os bonus de defesa
 local function incrementaDefesa()
 	defesa = defesa + bonusDefesa
-end	
+end
 
 local function incrementaAtaque()
 	ataque = ataque + bonusAtaque
@@ -416,21 +456,48 @@ local function penalizarInimigo(inimigo)
 end
 
 local function irParaPergunta()
+	-- Pauso o jogo
+  gamePaused = true;
+
+	local inicio = 0
+  local fim = 18
+	-- Sorteio uma das questÃµes e asalternativas
+  local nrQuestion
+  nrQuestion = math.random(inicio, fim)
+
+	local alts = {
+    {
+      ds_alter = questionTable[nrQuestion].ds_alter1
+    },
+    {
+      ds_alter = questionTable[nrQuestion].ds_alter2
+    },
+  }
+
+	local quiz = questionTable[nrQuestion]
+
+	-- Carrego a questÃ£o na variÃ¡vel com composer
+	composer.setVariable("quiz", quiz)
+	composer.setVariable("alternativas", alts)
+
+	composer.removeScene("cenas.quiz")
+  composer.gotoScene("cenas.quiz", { time=1000, effect="crossFade" })
+
 	perguntas = perguntas + 1
-	-- AQUI CHAMAR A CENA DA PERGUNTA
-	-- SE ACERTAR, INCREMENTAR A VARIÁVEL pontos
+
+	-- SE ACERTAR, INCREMENTAR A VARIï¿½VEL pontos
 end
 
--- Trata a colisão entre objetos
-local function onCollision(event)	
+-- Trata a colisï¿½o entre objetos
+local function onCollision(event)
 	if (not gamePaused) then
 		-- Capturo os objetos que colidiram
 		local obj1 = event.object1
 		local obj2 = event.object2
 
-		-- Verifico se é o início da colisão com a phase "began"
+		-- Verifico se ï¿½ o inï¿½cio da colisï¿½o com a phase "began"
 		if ( event.phase == "began" ) then
-			-- Testo as colisões que preciso tratar
+			-- Testo as colisï¿½es que preciso tratar
 			if (obj1.type == "jogador" and obj2.type == "inimigo")  then
 				penalizarJogador()
 				display.remove(obj2)
@@ -446,14 +513,14 @@ local function onCollision(event)
 			elseif (obj1.type == "jogador" and obj2.type == "ataque") then
 				incrementaAtaque()
 				display.remove(obj2)
-			elseif (obj1.type == "ataque" and obj2.type == "jogador") then	
+			elseif (obj1.type == "ataque" and obj2.type == "jogador") then
 				incrementaAtaque()
 				display.remove(obj1)
 			elseif (obj1.type == "jogador" and obj2.type == "pergunta") then
 				irParaPergunta()
 				display.remove(obj2)
 			elseif (obj1.type == "pergunta" and obj2.type == "jogador") then
-				irParaPergunta()	
+				irParaPergunta()
 				display.remove(obj1)
 			elseif (obj1.type == "bala" and obj2.type == "inimigo") then
 				penalizarInimigo(obj2)
@@ -474,12 +541,12 @@ Runtime:addEventListener("collision", onCollision)
 -- Eventos da cena
 -- -----------------------------------------------------------------------------
 
--- Quando a cena é criada.
+-- Quando a cena ï¿½ criada.
 function scene:create(event)
 	-- Busco o grupo principal para a cena
 	local sceneGroup = self.view
 
-	-- Pauso a física temporareamente
+	-- Pauso a fï¿½sica temporareamente
 	physics.pause()
 
 	-- Crio o grupo de background e adiciono ao grupo da cena
@@ -487,12 +554,12 @@ function scene:create(event)
 	sceneGroup:insert(groupBackground)
 	criarBackground(groupBackground)
 
-	-- Crio o grupo do cenário e adiciono ao grupo da cena
+	-- Crio o grupo do cenï¿½rio e adiciono ao grupo da cena
 	groupCenario = display.newGroup()
 	sceneGroup:insert(groupCenario)
 	criarGrupoCenario(groupCenario)
 
-	-- Crio o grupo de informações e adiciono ao grupo da cena
+	-- Crio o grupo de informaï¿½ï¿½es e adiciono ao grupo da cena
 	groupInformacoes = display.newGroup()
 	sceneGroup:insert(groupInformacoes)
 	criarGrupoInformacoes(groupInformacoes)
@@ -506,9 +573,12 @@ function scene:create(event)
 	groupControle = display.newGroup()
 	sceneGroup:insert(groupControle)
 	criarGrupoControle(groupControle)
+
+	-- Carrego as questÃµes
+  loadQuestionTable()
 end
 
--- Quando a cena está pronta para ser mostrada (phase will) e quando é mostrada (phase did).
+-- Quando a cena estï¿½ pronta para ser mostrada (phase will) e quando ï¿½ mostrada (phase did).
 function scene:show(event)
 	local sceneGroup = self.view
 	local phase = event.phase
@@ -519,43 +589,43 @@ function scene:show(event)
 		-- Reinicio o jogo
 		gamePaused = false
 
-		-- Reinicio o motor de física
+		-- Reinicio o motor de fï¿½sica
 		physics.start()
 
 		-- Programo o loop do jogo para executar a cada 500ms
-		gameLoopTimer = timer.performWithDelay(1000, gameLoop, 0)
+		timerJogador = timer.performWithDelay(1000, gameLoop, 0)
 
 		-- Programo o loop do jogador para executar a cada segundo
-		gamerLoopTimer = timer.performWithDelay(100, gamerLoop, 0)
+		timerCenario = timer.performWithDelay(100, gamerLoop, 0)
 
-		-- Atualizo o texto da pontuação
+		-- Atualizo o texto da pontuaï¿½ï¿½o
 		atualizarInformacoes()
 	end
 end
 
--- Quando a cena está prestes a ser escondida (phase will) e assim que é escondida (phase did).
+-- Quando a cena estï¿½ prestes a ser escondida (phase will) e assim que ï¿½ escondida (phase did).
 function scene:hide(event)
 	local sceneGroup = self.view
 	local phase = event.phase
 
 	if ( phase == "will" ) then
     -- Paro os temporizadores
-		timer.cancel(gameLoopTimer)
-    timer.cancel(gamerLoopTimer)
+		--timer.cancel(timerJogador)
+    --timer.cancel(timerCenario)
 
 	elseif ( phase == "did" ) then
     -- Pauso o jogo
     gamePaused = true
 
-    -- Removo a detecção de colisões
+    -- Removo a detecï¿½ï¿½o de colisï¿½es
     Runtime:removeEventListener("colision", onCollision)
 
-    -- Pauso o motor de física
+    -- Pauso o motor de fï¿½sica
     physics.pause()
 	end
 end
 
--- Quando a cena é destruida
+-- Quando a cena ï¿½ destruida
 function scene:destroy(event)
 	composer.setVariable("vidas", vidas)
 	composer.setVariable("pontos", pontos)
@@ -567,7 +637,7 @@ function scene:destroy(event)
 end
 
 -- -----------------------------------------------------------------------------
--- Adicionando os escutadores à cena
+-- Adicionando os escutadores ï¿½ cena
 -- -----------------------------------------------------------------------------
 scene:addEventListener("create", scene)
 scene:addEventListener("show", scene)
