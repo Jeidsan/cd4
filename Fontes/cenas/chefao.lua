@@ -317,16 +317,25 @@ local function criarObjeto(tipoObjeto)
 	transition.to(objeto, { x = -100, y = objeto.y, time = 4000, onComplete = function() display.remove(objeto) end})
 end
 
+local function tiroChefao()
+	local balaChefao = display.newImageRect("./imagens/inimigo1.png", 50, 50)
+	physics.addBody(balaChefao, "static", { isSensor = true } )    
+	balaChefao.type = "balaChefao"
+	balaChefao.x = imgChefao.x
+	balaChefao.y = imgChefao.y
+	balaChefao:toBack()
+
+	transition.to(balaChefao, { x = -50, time = 2500, onComplete = function() display.remove(balaChefao) end })
+end
+
 local function loopGame()
 	-- Sorteio o objeto que será criado
-	local objectType = math.random(8)
+	local objectType = math.random(10)
 
 	-- Crio o objeto conforme sorteio
 	if objectType <= 5 then
-		criarObjeto("inimigo")
-	elseif objectType == 6 then
-		criarObjeto("pergunta")
-	elseif objectType == 7 then
+		tiroChefao()
+	elseif objectType <= 8 then
 		criarObjeto("ataque")
 	else
 		criarObjeto("defesa")
@@ -354,9 +363,10 @@ local function penalizarJogador()
 	end
 end
 
-local function penalizarChefao(inimigo)
-	chefao.defesa = chefao.defesa - 1
-	if (chefao.defesa == 0) then
+local function penalizarChefao(inimigo)	
+	imgChefao.defesa = imgChefao.defesa - 1
+	imgChefao.alpha = 0.8
+	if (imgChefao.defesa == 0) then
 		irParaVitoria()
 	end
 end
@@ -381,7 +391,16 @@ local function loopJogador()
 end
 
 local function loopChefao()
-
+	local objectType = math.random(10)
+	imgChefao.alpha = 1
+	-- Crio o objeto conforme sorteio
+	if objectType <= 5 then
+		imgChefao.x = display.contentWidth - 200
+		imgChefao.y = display.contentHeight - 500
+	else
+		imgChefao.x = display.contentWidth - 200
+		imgChefao.y = display.contentHeight - 250
+	end			
 end
 
 -- Trata a colisão entre objetos
@@ -397,7 +416,7 @@ local function onCollision(event)
 			if (obj1.type == "jogador" and obj2.type == "balaChefao")  then
 				penalizarJogador()
 				display.remove(obj2)
-			elseif(obj1.type == "balaChefaor" and obj2.type == "jogador") then
+			elseif(obj1.type == "balaChefao" and obj2.type == "jogador") then
 				penalizarJogador()
 				display.remove(obj1)
 			elseif (obj1.type == "chefao" and obj2.type == "bala") then
@@ -427,6 +446,9 @@ function scene:create(event)
 	sceneGroup:insert(groupBackground)
 	criarBackground(groupBackground)
 
+	groupCenario = display.newGroup()
+	sceneGroup:insert(groupCenario)
+
 	groupJogador = display.newGroup()
 	sceneGroup:insert(groupJogador)
 	criarJogador(groupJogador)
@@ -454,9 +476,9 @@ function scene:show(event)
 		gamePaused = false
 		physics.start()
 
-		timerCenario = timer.performWithDelay(1000, loopGame, 0)
+		timerCenario = timer.performWithDelay(1500, loopGame, 0)
 		timerJogador = timer.performWithDelay(100, loopJogador, 0)
-		timerChefao = timer.performWithDelay(100, loopChefao, 0)
+		timerChefao = timer.performWithDelay(500, loopChefao, 0)
 
 		atualizarInformacoes()
 	end
