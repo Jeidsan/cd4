@@ -123,7 +123,7 @@ local function criarChefao(group)
 	imgChefao.type = "chefao"
 	imgChefao.defesa = defesaChefao
 
-	physics.addBody(imgChefao, "static")
+	physics.addBody(imgChefao, "dynamic")
 end
 
 local function subir()
@@ -291,10 +291,10 @@ end
 
 local function criarObjeto(tipoObjeto)
 	-- Crio o inimigo
-	local objeto = display.newImageRect(groupCenario, "./imagens/" .. tipoObjeto .. ".png", 100, 100)
+	local objeto = display.newImageRect(groupCenario, "./imagens/" .. tipoObjeto .. ".png", 90, 90, 50)
 
 	-- Posiciona o objeto	
-	objeto.x = display.contentWidth + 100 
+	objeto.x = display.contentWidth + 100 	
 	
 	if (math.random(3) == 1) then
 		objeto.y = 250
@@ -342,12 +342,12 @@ end
 
 local function gameOver()	
 	composer.setVariable("pontos", pontos)
-	composer.gotoScene("cenas.credits")
+	composer.gotoScene("cenas.highscores")
 end
 
 local function irParaVitoria()
 	composer.setVariable("pontos", pontos)
-	composer.gotoScene("cenas.credits")
+	composer.gotoScene("cenas.highscores")
 end
 
 local function penalizarJogador()
@@ -491,8 +491,9 @@ function scene:hide(event)
 
 	if ( phase == "will" ) then
     -- Paro os temporizadores
-		timer.cancel(gameLoopTimer)
-    timer.cancel(gamerLoopTimer)
+		timer.cancel(timerCenario)
+		timer.cancel(timerJogador)
+		timer.cancel(timerChefao)
 
 	elseif ( phase == "did" ) then
     -- Pauso o jogo

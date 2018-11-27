@@ -34,6 +34,15 @@ physics.setGravity(0, 20)
 -- Imagens
 local imgBackground
 local imgJogador
+local imgJogador1
+local imgJogador2
+local imgJogador3
+local imgJogador4
+local imgJogador5
+local imgJogador6
+local imgJogador7
+local imgJogador8
+local imgJogador9
 local imgVidas
 local imgPerguntas
 local imgPontos
@@ -107,43 +116,158 @@ local function criarBackground(group)
 end
 
 local function loopJogador()
-	--[[if nrGamer == 1 then
-		gamer1.isVisible = true
-		gamer2.isVisible = false
-		gamer3.isVisible = false
+	if nrGamer == 1 then
+		imgJogador1.isVisible = true
+		imgJogador.isVisible, imgJogador2.isVisible, imgJogador3.isVisible, imgJogador4.isVisible, imgJogador5.isVisible, imgJogador6.isVisible, imgJogador7.isVisible, imgJogador8.isVisible, imgJogador9.isVisible = false
 		nrGamer = 2
 	elseif nrGamer == 2 then
-		gamer1.isVisible = false
-		gamer2.isVisible = true
-		gamer3.isVisible = false
+		imgJogador2.isVisible = true
+		imgJogador.isVisible, imgJogador1.isVisible, imgJogador3.isVisible, imgJogador4.isVisible, imgJogador5.isVisible, imgJogador6.isVisible, imgJogador7.isVisible, imgJogador8.isVisible, imgJogador9.isVisible = false
 		nrGamer = 3
+	elseif nrGamer == 3 then
+		imgJogador3.isVisible = true
+		imgJogador.isVisible, imgJogador2.isVisible, imgJogador1.isVisible, imgJogador4.isVisible, imgJogador5.isVisible, imgJogador6.isVisible, imgJogador7.isVisible, imgJogador8.isVisible, imgJogador9.isVisible = false
+		nrGamer = 4
+	elseif nrGamer == 4 then
+		imgJogador4.isVisible = true
+		imgJogador.isVisible, imgJogador2.isVisible, imgJogador3.isVisible, imgJogador1.isVisible, imgJogador5.isVisible, imgJogador6.isVisible, imgJogador7.isVisible, imgJogador8.isVisible, imgJogador9.isVisible = false
+		nrGamer = 5
+	elseif nrGamer == 5 then
+		imgJogador5.isVisible = true
+		imgJogador.isVisible, imgJogador2.isVisible, imgJogador3.isVisible, imgJogador1.isVisible, imgJogador4.isVisible, imgJogador6.isVisible, imgJogador7.isVisible, imgJogador8.isVisible, imgJogador9.isVisible = false
+		nrGamer = 6
+	elseif nrGamer == 6 then
+		imgJogador6.isVisible = true
+		imgJogador.isVisible, imgJogador2.isVisible, imgJogador3.isVisible, imgJogador1.isVisible, imgJogador5.isVisible, imgJogador4.isVisible, imgJogador7.isVisible, imgJogador8.isVisible, imgJogador9.isVisible = false
+		nrGamer = 7
+	elseif nrGamer == 7 then
+		imgJogador7.isVisible = true
+		imgJogador.isVisible, imgJogador2.isVisible, imgJogador3.isVisible, imgJogador1.isVisible, imgJogador5.isVisible, imgJogador6.isVisible, imgJogador4.isVisible, imgJogador8.isVisible, imgJogador9.isVisible = false
+		nrGamer = 8
+	elseif nrGamer == 8 then
+		imgJogador8.isVisible = true
+		imgJogador.isVisible, imgJogador2.isVisible, imgJogador3.isVisible, imgJogador1.isVisible, imgJogador5.isVisible, imgJogador6.isVisible, imgJogador7.isVisible, imgJogador4.isVisible, imgJogador9.isVisible = false
+		nrGamer = 9
+	elseif nrGamer == 9 then
+		imgJogador9.isVisible = true
+		imgJogador.isVisible, imgJogador2.isVisible, imgJogador3.isVisible, imgJogador1.isVisible, imgJogador5.isVisible, imgJogador6.isVisible, imgJogador7.isVisible, imgJogador4.isVisible, imgJogador8.isVisible = false
+		nrGamer = 0
 	else
-		gamer1.isVisible = false
-		gamer2.isVisible = false
-		gamer3.isVisible = true
+		imgJogador.isVisible = true
+		imgJogador1.isVisible, imgJogador2.isVisible, imgJogador3.isVisible, imgJogador4.isVisible, imgJogador5.isVisible, imgJogador6.isVisible, imgJogador7.isVisible, imgJogador8.isVisible, imgJogador9.isVisible = false
 		nrGamer = 1
-	end]]
+	end
 end
 
 local function criarJogador(group)
-	imgJogador = display.newImageRect(group, "./imagens/samurai.png", 220, 220)
-	imgJogador.x = 150
-	imgJogador.y = display.contentHeight - 250	
+	imgJogador = display.newImageRect(group, "./imagens/jogador/0.png", 300, 300, 50)
+	imgJogador.x = 100
+	imgJogador.y = display.contentHeight - 200
 	imgJogador.type = "jogador"
 
+	imgJogador1 = display.newImageRect(group, "./imagens/jogador/1.png", 300, 300, 50)
+	imgJogador1.x = 100
+	imgJogador1.y = display.contentHeight - 200
+	imgJogador1.type = "jogador"
+
+	imgJogador2 = display.newImageRect(group, "./imagens/jogador/2.png", 300, 300, 50)
+	imgJogador2.x = 100
+	imgJogador2.y = display.contentHeight - 200
+	imgJogador2.type = "jogador"
+
+	imgJogador3 = display.newImageRect(group, "./imagens/jogador/3.png", 300, 300, 50)
+	imgJogador3.x = 100
+	imgJogador3.y = display.contentHeight - 200
+	imgJogador3.type = "jogador"
+
+	imgJogador4 = display.newImageRect(group, "./imagens/jogador/4.png", 300, 300, 50)
+	imgJogador4.x = 100
+	imgJogador4.y = display.contentHeight - 200
+	imgJogador4.type = "jogador"
+
+	imgJogador5 = display.newImageRect(group, "./imagens/jogador/5.png", 300, 300, 50)
+	imgJogador5.x = 100
+	imgJogador5.y = display.contentHeight - 200
+	imgJogador5.type = "jogador"
+
+	imgJogador6 = display.newImageRect(group, "./imagens/jogador/6.png", 300, 300, 50)
+	imgJogador6.x = 100
+	imgJogador6.y = display.contentHeight - 200
+	imgJogador6.type = "jogador"
+
+	imgJogador7 = display.newImageRect(group, "./imagens/jogador/7.png", 300, 300, 50)
+	imgJogador7.x = 100
+	imgJogador7.y = display.contentHeight - 200
+	imgJogador7.type = "jogador"
+
+	imgJogador8 = display.newImageRect(group, "./imagens/jogador/8.png", 300, 300, 50)
+	imgJogador8.x = 100
+	imgJogador8.y = display.contentHeight - 200
+	imgJogador8.type = "jogador"
+
+	imgJogador9 = display.newImageRect(group, "./imagens/jogador/9.png", 300, 300, 50)
+	imgJogador9.x = 100
+	imgJogador9.y = display.contentHeight - 200
+	imgJogador9.type = "jogador"
+
 	physics.addBody(imgJogador, "static")
+	physics.addBody(imgJogador1, "static")
+	physics.addBody(imgJogador2, "static")
+	physics.addBody(imgJogador3, "static")
+	physics.addBody(imgJogador4, "static")
+	physics.addBody(imgJogador5, "static")
+	physics.addBody(imgJogador6, "static")
+	physics.addBody(imgJogador7, "static")
+	physics.addBody(imgJogador8, "static")
+	physics.addBody(imgJogador9, "static")
 end
 
 -- Faz o jogador pular
 local function subir()
-	imgJogador.x = 150
-	imgJogador.y = 250
+	imgJogador.x = 100
+	imgJogador1.x = 100
+	imgJogador2.x = 100
+	imgJogador3.x = 100
+	imgJogador4.x = 100
+	imgJogador5.x = 100
+	imgJogador6.x = 100
+	imgJogador7.x = 100
+	imgJogador8.x = 100
+	imgJogador9.x = 100
+	imgJogador.y =  280
+	imgJogador1.y = 280
+	imgJogador2.y = 280
+	imgJogador3.y = 280
+	imgJogador4.y = 280
+	imgJogador5.y = 280
+	imgJogador6.y = 280
+	imgJogador7.y = 280
+	imgJogador8.y = 280
+	imgJogador9.y = 280
 end
 
 -- Faz o jogador pular
 local function descer()
-	imgJogador.x = 150
-	imgJogador.y = display.contentHeight - 250
+	imgJogador.x = 100
+	imgJogador1.x = 100
+	imgJogador2.x = 100
+	imgJogador3.x = 100
+	imgJogador4.x = 100
+	imgJogador5.x = 100
+	imgJogador6.x = 100
+	imgJogador7.x = 100
+	imgJogador8.x = 100
+	imgJogador9.x = 100
+	imgJogador.y = display.contentHeight - 200
+	imgJogador1.y = display.contentHeight - 200
+	imgJogador2.y = display.contentHeight - 200
+	imgJogador3.y = display.contentHeight - 200
+	imgJogador4.y = display.contentHeight - 200
+	imgJogador5.y = display.contentHeight - 200
+	imgJogador6.y = display.contentHeight - 200
+	imgJogador7.y = display.contentHeight - 200
+	imgJogador8.y = display.contentHeight - 200
+	imgJogador9.y = display.contentHeight - 200
 end
 
 local function ajustarTexto(text)
@@ -189,7 +313,6 @@ local function atualizarInformacoes()
 	txtDefesa.text = ajustarTexto(defesa)
 end
 
--- Faz o jogador atirar
 local function atirar()
 	if (ataque > 0) then
 		local bala = display.newImageRect("./imagens/bala.png", 50, 50)
@@ -422,7 +545,7 @@ local function irParaPergunta()
 	gamePaused = true;
 
 	local inicio = 0
-	local fim = 18
+	local fim = 15
 	-- Sorteio uma das questões e asalternativas
 	local nrQuestion
 	nrQuestion = math.random(inicio, fim)
@@ -540,10 +663,10 @@ function scene:show(event)
 		physics.start()
 
 		-- Programo o loop do jogo para executar a cada 500ms
-		timerJogador = timer.performWithDelay(1000, gameLoop, 0)
+		timerJogador = timer.performWithDelay(50, loopJogador, 0)
 
 		-- Programo o loop do jogador para executar a cada segundo
-		timerCenario = timer.performWithDelay(100, gamerLoop, 0)
+		timerCenario = timer.performWithDelay(1000, gameLoop, 0)
 
 		-- Atualizo o texto da pontua��o
 		atualizarInformacoes()
@@ -557,8 +680,8 @@ function scene:hide(event)
 
 	if ( phase == "will" ) then
     -- Paro os temporizadores
-		--timer.cancel(timerJogador)
-    --timer.cancel(timerCenario)
+		timer.cancel(timerJogador)
+		timer.cancel(timerCenario)
 
 	elseif ( phase == "did" ) then
     -- Pauso o jogo

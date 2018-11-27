@@ -38,20 +38,20 @@ local alternative3
 -- -----------------------------------------------------------------------------
 local function createBackground(sceneGroup)
 	-- Crio o background da cena
-  --background = display.newImageRect(sceneGroup, "images/background.png", display.contentWidth, display.contentHeight)
-  --background.x = display.contentCenterX
-  --background.y = display.contentCenterY
+  background = display.newImageRect(sceneGroup, "./imagens/game/quiz.png", display.contentWidth, display.contentHeight)
+  background.x = display.contentCenterX
+  background.y = display.contentCenterY
 end
 
 local function quizGoodAlternative(event)
-	-- Se o jogador acertar a pergunta, eu somo 0 pontos ao seu score
-	local score = composer.getVariable("score") + 50
-	composer.setVariable("score", score)
+	-- Se o jogador acertar a pergunta, eu somo 0 pontos ao seu pontos
+	local pontos = composer.getVariable("pontos") + 50
+	composer.setVariable("pontos", pontos)
 	composer.gotoScene("cenas.game")
 end
 
 local function quizBadAlternative(event)
-	-- Se o jogador errar a pergunta, ele perde score
+	-- Se o jogador errar a pergunta, ele perde pontos
 	--local energy = composer.getVariable("energy")
 
 	--if energy > 1 then
@@ -74,55 +74,33 @@ local function loadQuestion(backGroup)
 	local _HEIGHT = display.contentHeight / 4
 	local _WIDTH = (display.contentWidth - 150) / 2
 
-	-- Crio um quadro para servir de fundo à pergunta
-	local questionBackground = display.newRect(questionGroup, 50, 100, 2 * _WIDTH + 50, _HEIGHT)
-  questionBackground.anchorX = 0
-  questionBackground.anchorY = 0.5
-  questionBackground.alpha = 0.8
-
 	-- Crio a pergunta da questão
-	local questao = display.newText(questionGroup, quiz.ds_pergunta, display.contentCenterX, 100, "./font/Sniglet-Regular.otf", 42)
+	local questao = display.newText(questionGroup, quiz.ds_pergunta, display.contentCenterX, 105, "./font/Sniglet-Regular.otf", 42)
   questao.anchorX = 0.5
   questao.anchorY = 0.5
 	questao:setFillColor(cores.preto.r, cores.preto.g, cores.preto.b)
-
-	-- Crio quadros para servir de fundo as imagens
-	local alternativeQuestionBackground1 = display.newRect(questionGroup, display.contentCenterX, display.contentCenterY - 50, _WIDTH + 70, _HEIGHT)
-  alternativeQuestionBackground1.anchorX = 0
-  alternativeQuestionBackground1.anchorY = 0
-  alternativeQuestionBackground1.alpha = 0.8
-
-	local alternativeQuestionBackground2 = display.newRect(questionGroup, display.contentCenterX, display.contentCenterY, _WIDTH + 120, _HEIGHT)
-  alternativeQuestionBackground2.anchorX = 0
-  alternativeQuestionBackground2.anchorY = 0
-  alternativeQuestionBackground2.alpha = 0.8
-
-	local alternativeQuestionBackground3 = display.newRect(questionGroup, display.contentCenterX, display.contentCenterY + 100, _WIDTH + 170, _HEIGHT)
-  alternativeQuestionBackground3.anchorX = 0
-  alternativeQuestionBackground3.anchorY = 0
-  alternativeQuestionBackground3.alpha = 0.8
 
   local option = math.random(1, 3)
   if option == 1 then
     alternative1 = display.newText(questionGroup, quiz.ds_resposta, display.contentCenterX, display.contentCenterY - 70, "./font/Sniglet-Regular.otf", 36)
     alternative1:addEventListener("tap", quizGoodAlternative)
-    alternative2 = display.newText(questionGroup, alternativas[1].ds_alter, display.contentCenterX, display.contentCenterY + 50, "./font/Sniglet-Regular.otf", 36)
+    alternative2 = display.newText(questionGroup, alternativas[1].ds_alter, display.contentCenterX, display.contentCenterY + 90, "./font/Sniglet-Regular.otf", 36)
     alternative2:addEventListener("tap", quizBadAlternative)
-    alternative3 = display.newText(questionGroup, alternativas[2].ds_alter, display.contentCenterX, display.contentCenterY + 170, "./font/Sniglet-Regular.otf", 36)
+    alternative3 = display.newText(questionGroup, alternativas[2].ds_alter, display.contentCenterX, display.contentCenterY + 220, "./font/Sniglet-Regular.otf", 36)
     alternative3:addEventListener("tap", quizBadAlternative)
   elseif option == 2 then
     alternative1 = display.newText(questionGroup, alternativas[1].ds_alter, display.contentCenterX, display.contentCenterY - 70, "./font/Sniglet-Regular.otf", 36)
     alternative1:addEventListener("tap", quizBadAlternative)
-    alternative2 = display.newText(questionGroup, quiz.ds_resposta, display.contentCenterX, display.contentCenterY + 50, "./font/Sniglet-Regular.otf", 36)
+    alternative2 = display.newText(questionGroup, quiz.ds_resposta, display.contentCenterX, display.contentCenterY + 90, "./font/Sniglet-Regular.otf", 36)
     alternative2:addEventListener("tap", quizGoodAlternative)
-    alternative3 = display.newText(questionGroup, alternativas[2].ds_alter, display.contentCenterX, display.contentCenterY + 170, "./font/Sniglet-Regular.otf", 36)
+    alternative3 = display.newText(questionGroup, alternativas[2].ds_alter, display.contentCenterX, display.contentCenterY + 220, "./font/Sniglet-Regular.otf", 36)
     alternative3:addEventListener("tap", quizBadAlternative)
   else
     alternative1 = display.newText(questionGroup, alternativas[1].ds_alter, display.contentCenterX, display.contentCenterY - 70, "./font/Sniglet-Regular.otf", 36)
     alternative1:addEventListener("tap", quizBadAlternative)
-    alternative2 = display.newText(questionGroup, alternativas[2].ds_alter, display.contentCenterX, display.contentCenterY + 50, "./font/Sniglet-Regular.otf", 36)
+    alternative2 = display.newText(questionGroup, alternativas[2].ds_alter, display.contentCenterX, display.contentCenterY + 90, "./font/Sniglet-Regular.otf", 36)
     alternative2:addEventListener("tap", quizBadAlternative)
-    alternative3 = display.newText(questionGroup, quiz.ds_resposta, display.contentCenterX, display.contentCenterY + 170, "./font/Sniglet-Regular.otf", 30)
+    alternative3 = display.newText(questionGroup, quiz.ds_resposta, display.contentCenterX, display.contentCenterY + 220, "./font/Sniglet-Regular.otf", 30)
     alternative3:addEventListener("tap", quizGoodAlternative)
 end
 
