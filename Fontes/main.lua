@@ -35,5 +35,5 @@ cores =
 }
 
 -- Chamo a cena do menu
---composer.gotoScene("cenas.menu")
 composer.gotoScene("cenas.menu")
+--composer.gotoScene("cenas.chefao")

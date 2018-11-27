@@ -25,7 +25,7 @@ local physics = require("physics")
 
 -- Seto a gravidade como zero para que os objetos não caiam
 physics.start()
-physics.setGravity(0, 20)
+physics.setGravity(0, 0)
 
 --  ----------------------------------------------------------------------------------------------
 -- Variáveis da cena
@@ -156,11 +156,10 @@ end
 local function atirar()
 	if (ataque > 0) then
 		local bala = display.newImageRect("./imagens/bala.png", 30, 30)
-		physics.addBody(bala, "static", { isSensor = true } )    
+		physics.addBody(bala, "dynamic", { isSensor = true } )    
 		bala.type = "bala"
 		bala.x = imgJogador.x
 		bala.y = imgJogador.y
-		bala:toBack()
 
 		transition.to(bala, { x = display.contentWidth + 50, time = 500, onComplete = function() display.remove(bala) end })
 		ataque = ataque - 1
@@ -319,11 +318,10 @@ end
 
 local function tiroChefao()
 	local balaChefao = display.newImageRect("./imagens/inimigo1.png", 50, 50)
-	physics.addBody(balaChefao, "static", { isSensor = true } )    
+	physics.addBody(balaChefao, "dynamic", { isSensor = true } )    
 	balaChefao.type = "balaChefao"
 	balaChefao.x = imgChefao.x
-	balaChefao.y = imgChefao.y
-	balaChefao:toBack()
+	balaChefao.y = imgChefao.y	
 
 	transition.to(balaChefao, { x = -50, time = 2500, onComplete = function() display.remove(balaChefao) end })
 end
@@ -343,13 +341,13 @@ local function loopGame()
 end
 
 local function gameOver()	
-	composer.setVariable("score", txtScore.text)
-	composer.gotoScene("cenas.gameover")
+	composer.setVariable("pontos", pontos)
+	composer.gotoScene("cenas.credits")
 end
 
 local function irParaVitoria()
-	composer.setVariable("score", txtScore.text)
-	composer.gotoScene("cenas.recordes")
+	composer.setVariable("pontos", pontos)
+	composer.gotoScene("cenas.credits")
 end
 
 local function penalizarJogador()
@@ -363,12 +361,14 @@ local function penalizarJogador()
 	end
 end
 
-local function penalizarChefao(inimigo)	
+local function penalizarChefao()	
 	imgChefao.defesa = imgChefao.defesa - 1
 	imgChefao.alpha = 0.8
 	if (imgChefao.defesa == 0) then
 		irParaVitoria()
 	end
+
+	print(imgChefao.defesa)
 end
 
 local function loopJogador()
@@ -408,7 +408,7 @@ local function onCollision(event)
 	if (not gamePaused) then
 		-- Capturo os objetos que colidiram
 		local obj1 = event.object1
-		local obj2 = event.object2
+		local obj2 = event.object2	
 
 		-- Verifico se é o início da colisão com a phase "began"
 		if ( event.phase == "began" ) then
@@ -424,7 +424,7 @@ local function onCollision(event)
 				display.remove(obj2)
 			elseif (obj1.type == "bala" and obj2.type == "chefao") then
 				penalizarChefao()
-				display.remove(obj1)
+				display.remove(obj1)	
 			end
 
 			atualizarInformacoes()

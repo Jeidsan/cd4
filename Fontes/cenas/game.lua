@@ -378,7 +378,7 @@ end
 
 local function gameOver()
 	composer.setVariable("pontos", pontos)
-	composer.gotoScene("cenas.gameover")
+	composer.gotoScene("cenas.credits")
 end
 
 local function penalizarJogador()
