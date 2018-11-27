@@ -471,10 +471,10 @@ local function onCollision(event)
 				incrementaAtaque()
 				display.remove(obj1)
 			elseif (obj1.type == "jogador" and obj2.type == "pergunta") then
-				--irParaPergunta()
+				irParaPergunta()
 				display.remove(obj2)
 			elseif (obj1.type == "pergunta" and obj2.type == "jogador") then
-				--irParaPergunta()
+				irParaPergunta()
 				display.remove(obj1)
 			elseif (obj1.type == "bala" and obj2.type == "inimigo") then
 				penalizarInimigo(obj2)
