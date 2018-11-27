@@ -1,12 +1,12 @@
 --  ----------------------------------------------------------------------------------------------
 --  projectname:	CD4: The Agent
---  filename:		game.lua
+--  filename:		chefao.lua
 --	version:		1.0
---  description:	Ponto de entrada do game.
+--  description:	Cena do chefão
 --  authors:		Jeidsan A. da C. Pereira (jeidsan.pereira@gmail.com)
 --					Rafaela Ruchinski (rafaelaruchi@gmail.com)
---  created:		2018-09-25
---  modified:		2018-09-25
+--  created:		2018-10-25
+--  modified:		2018-10-25
 --	dependencies:	Composer (https://docs.coronalabs.com/guide/system/composer/index.html)
 --  ----------------------------------------------------------------------------------------------
 
@@ -34,33 +34,31 @@ physics.setGravity(0, 20)
 -- Imagens
 local imgBackground
 local imgJogador
+local imgChefao
 local imgVidas
 local imgPerguntas
 local imgPontos
 local imgAtaque
 local imgDefesa
 
--- Plataforma
-local plataforma
-
 -- Textos
 local txtVidas
 local txtPerguntas
 local txtPontos
+local txtAtaque
+local txtDefesa
 
 -- Grupos de objetos
 local groupBackground
 local groupInformacoes
-local groupCenario
 local groupJogador
+local groupChefao
 local groupControle
 
 -- Timers
 local timerJogador
+local timerChefao
 local timerCenario
-
--- Tabela para carregar as perguntas
-local tablePerguntas = {}
 
 -- Variável para informar se o jogo está pausado.
 local flagPausado = true
@@ -74,10 +72,9 @@ local tamanhoUnidade = (display.contentWidth / 5) - tamanhoMargem
 
 -- Parâmetros para definir a dificuldade do jogo
 local danoJogador = 1 --composer.getVariable("danoJogador")
-local danoInimigo = 2 --composer.getVariable("danoInimigo")
 local bonusDefesa = 10 --composer.getVariable("bonusDefesa")
 local bonusAtaque = 25 --composer.getVariable("bonusAtaque")
-local quantidadeInimigos = 15 --composer.getVariable("quantidadeInimigos")
+local defesaChefao = 40
 
 -- Carrego os demais parâmetros do jogo
 composer.setVariable("vidas", 5)
@@ -95,6 +92,9 @@ local ataque = composer.getVariable("ataque")
 composer.setVariable("defesa", 10)
 local defesa = composer.getVariable("defesa")
 
+-- Controle
+local direcaoChefao = 1
+
 -- -----------------------------------------------------------------------------
 -- Métodos e escopo principal da cena
 -- -----------------------------------------------------------------------------
@@ -107,52 +107,33 @@ local function criarBackground(group)
 	--background.y = display.contentCenterY
 end
 
--- Controla o efeito do personagem correndo
-local function loopJogador()
-	--[[if nrGamer == 1 then
-		gamer1.isVisible = true
-		gamer2.isVisible = false
-		gamer3.isVisible = false
-		nrGamer = 2
-	elseif nrGamer == 2 then
-		gamer1.isVisible = false
-		gamer2.isVisible = true
-		gamer3.isVisible = false
-		nrGamer = 3
-	else
-		gamer1.isVisible = false
-		gamer2.isVisible = false
-		gamer3.isVisible = true
-		nrGamer = 1
-	end]]
-end
-
--- Cria o jogador e trata a sua movimentação
 local function criarJogador(group)
-	-- Crio o grupo para o jogador
 	imgJogador = display.newImageRect(group, "./imagens/samurai.png", 220, 220)
 	imgJogador.x = 150
 	imgJogador.y = display.contentHeight - 250	
-
-	-- Informo que o gamer é do tipo gamer
 	imgJogador.type = "jogador"
 
-	-- Adiciono-o ao motor de física
 	physics.addBody(imgJogador, "static")
 end
 
--- Faz o jogador pular
-local function subir()
-	imgJogador.x = 150
-	imgJogador.y = 250
-	--imgJogador:applyLinearImpulse(0, -7, imgJogador.x, imgJogador.y)
+local function criarChefao(group)
+	imgChefao = display.newImageRect(group, "./imagens/zombie.png", 280, 280)
+	imgChefao.x = display.contentWidth - 200
+	imgChefao.y = display.contentHeight - 250
+	imgChefao.type = "chefao"
+	imgChefao.defesa = defesaChefao
+
+	physics.addBody(imgChefao, "static")
 end
 
--- Faz o jogador pular
+local function subir()
+	imgJogador.x = 150
+	imgJogador.y = 250	
+end
+
 local function descer()
 	imgJogador.x = 150
 	imgJogador.y = display.contentHeight - 250
-	--imgJogador:applyLinearImpulse(0, -7, imgJogador.x, imgJogador.y)
 end
 
 local function ajustarTexto(text)
@@ -164,7 +145,6 @@ local function ajustarTexto(text)
 	return text
 end
 
--- Atualiza os textos de pontuação, munição e vidas
 local function atualizarInformacoes()
 	txtVidas.text = ajustarTexto(vidas)
 	txtPerguntas.text = ajustarTexto(perguntas)
@@ -173,7 +153,6 @@ local function atualizarInformacoes()
 	txtDefesa.text = ajustarTexto(defesa)
 end
 
--- Faz o jogador atirar
 local function atirar()
 	if (ataque > 0) then
 		local bala = display.newImageRect("./imagens/bala.png", 30, 30)
@@ -189,7 +168,6 @@ local function atirar()
 	end
 end
 
--- Cria o painel de informações do jogo
 local function criarGrupoInformacoes(infoGroup)
 	-- Cria o ícone das vidas
 	imgVidas = display.newImageRect(infoGroup, "./imagens/vidas.png", tamanhoIcone, tamanhoIcone)
@@ -282,21 +260,10 @@ local function criarGrupoInformacoes(infoGroup)
 	txtDefesa.anchorX = 0	
 end
 
--- Cria o cenário
-local function criarGrupoCenario(group)
-	-- Crio a plataforma
-	--plataforma = display.newLine(group, 0, display.contentHeight - 155, display.contentWidth, display.contentHeight - 155)
-	--plataforma.anchorY = 0
-	--plataforma:setStrokeColor(0,0,0, 1)
-	--plataforma.strokeWidth = 2
-	--physics.addBody(plataforma, "static")
-end
-
 local function gotoMenu()
   composer.gotoScene("cenas.menu")
 end
-	
--- Cria o grupo de controles
+
 local function criarGrupoControle(group)
   -- Cria o botão para subir
   local btnSubir = display.newImageRect(group, "./imagens/pular.png", 2 * tamanhoIcone, 2 * tamanhoIcone)
@@ -323,7 +290,6 @@ local function criarGrupoControle(group)
   btnFechar:addEventListener("tap", gotoMenu)
 end
 
--- Cria os objetos
 local function criarObjeto(tipoObjeto)
 	-- Crio o inimigo
 	local objeto = display.newImageRect(groupCenario, "./imagens/" .. tipoObjeto .. ".png", 100, 100)
@@ -351,8 +317,7 @@ local function criarObjeto(tipoObjeto)
 	transition.to(objeto, { x = -100, y = objeto.y, time = 4000, onComplete = function() display.remove(objeto) end})
 end
 
--- Implementa o loop do jogo
-local function gameLoop()
+local function loopGame()
 	-- Sorteio o objeto que será criado
 	local objectType = math.random(8)
 
@@ -368,15 +333,16 @@ local function gameLoop()
 	end
 end
 
-local function gameOver()
-	-- Manda para a proxima cena a pontuaçao total
+local function gameOver()	
 	composer.setVariable("score", txtScore.text)
-
-	--Muda de cena - Fim de Jogo
 	composer.gotoScene("cenas.gameover")
 end
 
--- Trata das colisões com os inimigos
+local function irParaVitoria()
+	composer.setVariable("score", txtScore.text)
+	composer.gotoScene("cenas.recordes")
+end
+
 local function penalizarJogador()
 	defesa = defesa - danoJogador
 	if defesa == 0 then
@@ -388,37 +354,34 @@ local function penalizarJogador()
 	end
 end
 
--- Trata das colisões com os bonus de defesa
-local function incrementaDefesa()
-	defesa = defesa + bonusDefesa
-end	
-
-local function incrementaAtaque()
-	ataque = ataque + bonusAtaque
-end
-
-local function irParaChefao()
-	composer.setVariable("score", txtScore.text)
-	composer.gotoScene("cenas.chefao")
-end
-
-local function penalizarInimigo(inimigo)
-	inimigo.defesa = inimigo.defesa - danoInimigo
-	if (inimigo.defesa <= 0) then
-		pontos = pontos + 10
-		display.remove(inimigo)
-
-		quantidadeInimigos = quantidadeInimigos - 1
-		if (quantidadeInimigos == 0)
-			irParaChefao()
-		end
+local function penalizarChefao(inimigo)
+	chefao.defesa = chefao.defesa - 1
+	if (chefao.defesa == 0) then
+		irParaVitoria()
 	end
 end
 
-local function irParaPergunta()
-	perguntas = perguntas + 1
-	-- AQUI CHAMAR A CENA DA PERGUNTA
-	-- SE ACERTAR, INCREMENTAR A VARIÁVEL pontos
+local function loopJogador()
+	--[[if nrGamer == 1 then
+		gamer1.isVisible = true
+		gamer2.isVisible = false
+		gamer3.isVisible = false
+		nrGamer = 2
+	elseif nrGamer == 2 then
+		gamer1.isVisible = false
+		gamer2.isVisible = true
+		gamer3.isVisible = false
+		nrGamer = 3
+	else
+		gamer1.isVisible = false
+		gamer2.isVisible = false
+		gamer3.isVisible = true
+		nrGamer = 1
+	end]]
+end
+
+local function loopChefao()
+
 end
 
 -- Trata a colisão entre objetos
@@ -431,36 +394,18 @@ local function onCollision(event)
 		-- Verifico se é o início da colisão com a phase "began"
 		if ( event.phase == "began" ) then
 			-- Testo as colisões que preciso tratar
-			if (obj1.type == "jogador" and obj2.type == "inimigo")  then
+			if (obj1.type == "jogador" and obj2.type == "balaChefao")  then
 				penalizarJogador()
 				display.remove(obj2)
-			elseif(obj1.type == "inimigo" and obj2.type == "jogador") then
+			elseif(obj1.type == "balaChefaor" and obj2.type == "jogador") then
 				penalizarJogador()
 				display.remove(obj1)
-			elseif (obj1.type == "jogador" and obj2.type == "defesa") then
-				incrementaDefesa()
+			elseif (obj1.type == "chefao" and obj2.type == "bala") then
+				penalizarChefao()
 				display.remove(obj2)
-			elseif (obj1.type == "defesa" and obj2.type == "jogador") then
-				incrementaDefesa()
+			elseif (obj1.type == "bala" and obj2.type == "chefao") then
+				penalizarChefao()
 				display.remove(obj1)
-			elseif (obj1.type == "jogador" and obj2.type == "ataque") then
-				incrementaAtaque()
-				display.remove(obj2)
-			elseif (obj1.type == "ataque" and obj2.type == "jogador") then	
-				incrementaAtaque()
-				display.remove(obj1)
-			elseif (obj1.type == "jogador" and obj2.type == "pergunta") then
-				irParaPergunta()
-				display.remove(obj2)
-			elseif (obj1.type == "pergunta" and obj2.type == "jogador") then
-				irParaPergunta()	
-				display.remove(obj1)
-			elseif (obj1.type == "bala" and obj2.type == "inimigo") then
-				penalizarInimigo(obj2)
-				display.remove(obj1)
-			elseif (obj1.type == "inimigo" and obj2.type == "bala") then
-				penalizarInimigo(obj1)
-				display.remove(obj2)
 			end
 
 			atualizarInformacoes()
@@ -474,35 +419,26 @@ Runtime:addEventListener("collision", onCollision)
 -- Eventos da cena
 -- -----------------------------------------------------------------------------
 
--- Quando a cena é criada.
 function scene:create(event)
-	-- Busco o grupo principal para a cena
 	local sceneGroup = self.view
-
-	-- Pauso a física temporareamente
 	physics.pause()
 
-	-- Crio o grupo de background e adiciono ao grupo da cena
 	groupBackground = display.newGroup()
 	sceneGroup:insert(groupBackground)
 	criarBackground(groupBackground)
 
-	-- Crio o grupo do cenário e adiciono ao grupo da cena
-	groupCenario = display.newGroup()
-	sceneGroup:insert(groupCenario)
-	criarGrupoCenario(groupCenario)
-
-	-- Crio o grupo de informações e adiciono ao grupo da cena
-	groupInformacoes = display.newGroup()
-	sceneGroup:insert(groupInformacoes)
-	criarGrupoInformacoes(groupInformacoes)
-
-	-- Crio um grupo para o jogador r adiciono ao grupo da cena
 	groupJogador = display.newGroup()
 	sceneGroup:insert(groupJogador)
 	criarJogador(groupJogador)
 
-	-- Crio o grupo de Controles e adiciono ao grupo da cena
+	groupChefao = display.newGroup()
+	sceneGroup:insert(groupChefao)
+	criarChefao(groupChefao)
+
+	groupInformacoes = display.newGroup()
+	sceneGroup:insert(groupInformacoes)
+	criarGrupoInformacoes(groupInformacoes)
+
 	groupControle = display.newGroup()
 	sceneGroup:insert(groupControle)
 	criarGrupoControle(groupControle)
@@ -514,21 +450,14 @@ function scene:show(event)
 	local phase = event.phase
 
 	if ( phase == "will" ) then
-
-	elseif ( phase == "did" ) then
-		-- Reinicio o jogo
+	elseif ( phase == "did" ) then	
 		gamePaused = false
-
-		-- Reinicio o motor de física
 		physics.start()
 
-		-- Programo o loop do jogo para executar a cada 500ms
-		gameLoopTimer = timer.performWithDelay(1000, gameLoop, 0)
+		timerCenario = timer.performWithDelay(1000, loopGame, 0)
+		timerJogador = timer.performWithDelay(100, loopJogador, 0)
+		timerChefao = timer.performWithDelay(100, loopChefao, 0)
 
-		-- Programo o loop do jogador para executar a cada segundo
-		gamerLoopTimer = timer.performWithDelay(100, gamerLoop, 0)
-
-		-- Atualizo o texto da pontuação
 		atualizarInformacoes()
 	end
 end
