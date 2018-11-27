@@ -11,76 +11,77 @@
 --  ----------------------------------------------------------------------------------------------
 
 -- -----------------------------------------------------------------------------
--- Configuração inicial para a cena
+-- Configuraï¿½ï¿½o inicial para a cena
 -- -----------------------------------------------------------------------------
 
--- Carrego o Composer para tratar as cenas da aplicação
+-- Carrego o Composer para tratar as cenas da aplicaï¿½ï¿½o
 local composer = require("composer")
 
 -- Crio uma nova cena
 local scene = composer.newScene()
 
 -- -----------------------------------------------------------------------------
--- Variáveis da cena
+-- Variï¿½veis da cena
 -- -----------------------------------------------------------------------------
 
 -- -----------------------------------------------------------------------------
--- Métodos e escopo principal da cena
+-- Mï¿½todos e escopo principal da cena
 -- -----------------------------------------------------------------------------
 
--- Leva o usuário até a cena do Jogo
+-- Leva o usuï¿½rio atï¿½ a cena do Jogo
 local function gotoGame()
-	composer.removeScene("game")
-	composer.gotoScene("game", { time=1000, effect="crossFade" })
+	composer.removeScene("cenas.game")
+	composer.gotoScene("cenas.game", { time=1000, effect="crossFade" })
 end
 
--- Leva o usuário até a cena de pontuação
+-- Leva o usuï¿½rio atï¿½ a cena de pontuaï¿½ï¿½o
 local function gotoHighScores()
-	composer.removeScene("highscores")
-	composer.gotoScene("highscores", { time=1000, effect="crossFade" })
+	composer.removeScene("cenas.highscores")
+	composer.gotoScene("cenas.highscores", { time=1000, effect="crossFade" })
 end
 
--- Leva o usuário até a cena de créditos
+-- Leva o usuï¿½rio atï¿½ a cena de crï¿½ditos
 local function gotoCredits()
-	composer.gotoScene("credits", { time=1000, effect="crossFade" })
+	composer.gotoScene("cenas.credits", { time=1000, effect="crossFade" })
 end
 
 -- -----------------------------------------------------------------------------
 -- Eventos da cena
 -- -----------------------------------------------------------------------------
 
--- Quando a cena é criada.
+-- Quando a cena ï¿½ criada.
 function scene:create(event)
 	-- Busco o grupo principal para a cena
 	local sceneGroup = self.view
 
-	-- Crio o background da cena	
-	local background = display.newImageRect(sceneGroup, "./imagens/back.jpg", 1280, 720)
+	-- Crio o background da cena
+	local background = display.newImageRect(sceneGroup, "./imagens/backMenu.jpg", 1280, 720)
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
+	background.alpha = 0.9
 
 	-- Crio a logo go jogo
-	local logo = display.newText(sceneGroup, "CD4: The Agent", (display.contentWidth / 10) * 7 , 175, native.systemFont, 75)
-	logo:setFillColor(color.branco.r, color.branco.g, color.branco.b, 0.85)
-	
+	local title1 = display.newText(sceneGroup, "CD4", (display.contentWidth / 10) * 3, 90, "./font/edo.ttf", 130 )
+	local title2 = display.newText(sceneGroup, "The Agent", (display.contentWidth / 10) * 3, 220, "./font/edo.ttf", 90 )
+  --title1:setFillColor(color.branco.r, color.branco.g, color.branco.b, 0.85)
 
-	-- Crio as opções do menu
-	local btnPlay = display.newText(sceneGroup, "Novo Jogo", (display.contentWidth / 10) * 7, 325, native.systemFont, 60)
+	-- Crio as opï¿½ï¿½es do menu
+	local btnPlay = display.newText(sceneGroup, "Novo Jogo", (display.contentWidth / 9) * 7, 220, "./font/Sniglet-Regular.otf", 90)
 	btnPlay:setFillColor(color.branco.r, color.branco.g, color.branco.b, 0.85)
 	btnPlay:addEventListener("tap", gotoGame)
 
-	
-	local btnHighScores = display.newText(sceneGroup, "Pontuacao", (display.contentWidth / 10) * 7, 425, native.systemFont, 60)
+
+	local btnHighScores = display.newText(sceneGroup, "PontuaÃ§Ã£o", (display.contentWidth / 9) * 7, 350, "./font/Sniglet-Regular.otf", 90)
 	btnHighScores:setFillColor(color.branco.r, color.branco.g, color.branco.b, 0.85)
 	btnHighScores:addEventListener("tap", gotoHighScores)
 
-	local btnCredits = display.newText(sceneGroup, "Info", (display.contentWidth / 10) * 7, 525, native.systemFont, 60)
+	local btnCredits = display.newText(sceneGroup, "Info", (display.contentWidth / 9) * 7, 480, "./font/Sniglet-Regular.otf", 90)
 	btnCredits:setFillColor(color.branco.r, color.branco.g, color.branco.b, 0.85)
 	btnCredits:addEventListener("tap", gotoCredits)
 
 end
 
--- Quando a cena está pronta para ser mostrada (phase will) e quando é mostrada (phase did).
+-- Quando a cena estï¿½ pronta para ser mostrada (phase will) e quando ï¿½ mostrada (phase did).
 function scene:show(event)
 	local sceneGroup = self.view
 	local phase = event.phase
@@ -90,7 +91,7 @@ function scene:show(event)
 	end
 end
 
--- Quando a cena está prestes a ser escondida (phase will) e assim que é escondida (phase did).
+-- Quando a cena estï¿½ prestes a ser escondida (phase will) e assim que ï¿½ escondida (phase did).
 function scene:hide(event)
 	local sceneGroup = self.view
 	local phase = event.phase
@@ -100,13 +101,13 @@ function scene:hide(event)
 	end
 end
 
--- Quando a cena é destruida
+-- Quando a cena ï¿½ destruida
 function scene:destroy(event)
 	local sceneGroup = self.view
 end
 
 -- -----------------------------------------------------------------------------
--- Adicionando os escutadores à cena
+-- Adicionando os escutadores ï¿½ cena
 -- -----------------------------------------------------------------------------
 scene:addEventListener("create", scene)
 scene:addEventListener("show", scene)
