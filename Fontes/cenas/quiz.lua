@@ -44,25 +44,14 @@ local function createBackground(sceneGroup)
 end
 
 local function quizGoodAlternative(event)
-	-- Se o jogador acertar a pergunta, eu somo 0 pontos ao seu pontos
+	-- Se o jogador acertar a pergunta, eu somo 0 pontos ao seu score
 	local pontos = composer.getVariable("pontos") + 50
 	composer.setVariable("pontos", pontos)
 	composer.gotoScene("cenas.game")
 end
 
 local function quizBadAlternative(event)
-	-- Se o jogador errar a pergunta, ele perde pontos
-	--local energy = composer.getVariable("energy")
-
-	--if energy > 1 then
-	--	energy = energy - 1
-	--else
-	--	energy = 5
-	--	composer.setVariable("lives", composer.getVariable("lives") - 1)
-	--end
-
-	--composer.setVariable("energy", energy)
-	--composer.gotoScene("game")
+	composer.gotoScene("cenas.game")
 end
 
 local function loadQuestion(backGroup)
@@ -82,25 +71,25 @@ local function loadQuestion(backGroup)
 
   local option = math.random(1, 3)
   if option == 1 then
-    alternative1 = display.newText(questionGroup, quiz.ds_resposta, display.contentCenterX, display.contentCenterY - 70, "./font/Sniglet-Regular.otf", 36)
+    alternative1 = display.newText(questionGroup, quiz.ds_resposta, display.contentCenterX, display.contentCenterY - 55, "./font/Sniglet-Regular.otf", 36)
     alternative1:addEventListener("tap", quizGoodAlternative)
     alternative2 = display.newText(questionGroup, alternativas[1].ds_alter, display.contentCenterX, display.contentCenterY + 90, "./font/Sniglet-Regular.otf", 36)
     alternative2:addEventListener("tap", quizBadAlternative)
-    alternative3 = display.newText(questionGroup, alternativas[2].ds_alter, display.contentCenterX, display.contentCenterY + 220, "./font/Sniglet-Regular.otf", 36)
+    alternative3 = display.newText(questionGroup, alternativas[2].ds_alter, display.contentCenterX, display.contentCenterY + 225, "./font/Sniglet-Regular.otf", 36)
     alternative3:addEventListener("tap", quizBadAlternative)
   elseif option == 2 then
-    alternative1 = display.newText(questionGroup, alternativas[1].ds_alter, display.contentCenterX, display.contentCenterY - 70, "./font/Sniglet-Regular.otf", 36)
+    alternative1 = display.newText(questionGroup, alternativas[1].ds_alter, display.contentCenterX, display.contentCenterY - 55, "./font/Sniglet-Regular.otf", 36)
     alternative1:addEventListener("tap", quizBadAlternative)
     alternative2 = display.newText(questionGroup, quiz.ds_resposta, display.contentCenterX, display.contentCenterY + 90, "./font/Sniglet-Regular.otf", 36)
     alternative2:addEventListener("tap", quizGoodAlternative)
-    alternative3 = display.newText(questionGroup, alternativas[2].ds_alter, display.contentCenterX, display.contentCenterY + 220, "./font/Sniglet-Regular.otf", 36)
+    alternative3 = display.newText(questionGroup, alternativas[2].ds_alter, display.contentCenterX, display.contentCenterY + 225, "./font/Sniglet-Regular.otf", 36)
     alternative3:addEventListener("tap", quizBadAlternative)
   else
-    alternative1 = display.newText(questionGroup, alternativas[1].ds_alter, display.contentCenterX, display.contentCenterY - 70, "./font/Sniglet-Regular.otf", 36)
+    alternative1 = display.newText(questionGroup, alternativas[1].ds_alter, display.contentCenterX, display.contentCenterY - 55, "./font/Sniglet-Regular.otf", 36)
     alternative1:addEventListener("tap", quizBadAlternative)
     alternative2 = display.newText(questionGroup, alternativas[2].ds_alter, display.contentCenterX, display.contentCenterY + 90, "./font/Sniglet-Regular.otf", 36)
     alternative2:addEventListener("tap", quizBadAlternative)
-    alternative3 = display.newText(questionGroup, quiz.ds_resposta, display.contentCenterX, display.contentCenterY + 220, "./font/Sniglet-Regular.otf", 30)
+    alternative3 = display.newText(questionGroup, quiz.ds_resposta, display.contentCenterX, display.contentCenterY + 225, "./font/Sniglet-Regular.otf", 30)
     alternative3:addEventListener("tap", quizGoodAlternative)
 end
 

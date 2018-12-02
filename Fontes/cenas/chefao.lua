@@ -108,9 +108,9 @@ local function criarBackground(group)
 end
 
 local function criarJogador(group)
-	imgJogador = display.newImageRect(group, "./imagens/samurai.png", 220, 220)
-	imgJogador.x = 150
-	imgJogador.y = display.contentHeight - 250	
+	imgJogador = display.newImageRect(group, "./imagens/jogador/0.png", 300, 300, 50)
+	imgJogador.x = 100
+	imgJogador.y = display.contentHeight - 200
 	imgJogador.type = "jogador"
 
 	physics.addBody(imgJogador, "static")
@@ -156,7 +156,7 @@ end
 local function atirar()
 	if (ataque > 0) then
 		local bala = display.newImageRect("./imagens/bala.png", 30, 30)
-		physics.addBody(bala, "dynamic", { isSensor = true } )    
+		physics.addBody(bala, "static", { isSensor = true } )    
 		bala.type = "bala"
 		bala.x = imgJogador.x
 		bala.y = imgJogador.y
@@ -367,8 +367,6 @@ local function penalizarChefao()
 	if (imgChefao.defesa == 0) then
 		irParaVitoria()
 	end
-
-	print(imgChefao.defesa)
 end
 
 local function loopJogador()
@@ -414,10 +412,10 @@ local function onCollision(event)
 		if ( event.phase == "began" ) then
 			-- Testo as colisões que preciso tratar
 			if (obj1.type == "jogador" and obj2.type == "balaChefao")  then
-				penalizarJogador()
+				--penalizarJogador()
 				display.remove(obj2)
 			elseif(obj1.type == "balaChefao" and obj2.type == "jogador") then
-				penalizarJogador()
+				--penalizarJogador()
 				display.remove(obj1)
 			elseif (obj1.type == "chefao" and obj2.type == "bala") then
 				penalizarChefao()
@@ -488,6 +486,8 @@ end
 function scene:hide(event)
 	local sceneGroup = self.view
 	local phase = event.phase
+
+	composer.removeScene("cenas.game")
 
 	if ( phase == "will" ) then
     -- Paro os temporizadores

@@ -524,8 +524,11 @@ local function incrementaAtaque()
 end
 
 local function irParaChefao()
+	gamePaused = true
 	composer.setVariable("pontos", pontos)
-	composer.gotoScene("cenas.chefao")
+
+	composer.removeScene("cenas.chefao")
+	composer.gotoScene("cenas.chefao", { time=1000, effect="crossFade" })
 end
 
 local function penalizarInimigo(inimigo)
